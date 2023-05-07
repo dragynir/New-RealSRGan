@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH -J tomo  # Job name
+#SBATCH -p gpuserv # Queue name (another queue - compclass)
+#SBATCH -e resnet_1x_2x_stage1_exp0.err # Name of stderr file (%j expands to %jobId)
+#SBATCH -o resnet_1x_2x_stage1_exp0.out  # Name of stdout output file (%j expands to %jobId)
+#SBATCH -N 1   # Total number of nodes requested
+#SBATCH -c 4   # CPUs per task
+#SBATCH -t 24:00:00 # Maximal run time (hh:mm:ss) - 1 minute
+. $CONDA_ROOT/etc/profile.d/conda.sh
+
+module load nvidia/cuda
+echo "Current path=`pwd`"
+echo "node=`hostname`"
+echo "nproc=`nproc`"
+nvcc --version
+echo $SLURM_JOBID
+echo $SLURM_SUBMIT_DIR
+echo $SLURM_JOB_NODELIST
+echo $SLURM_CPUS_PER_TASK
+echo $SLURM_NTASKS
+nvidia-smi
+conda activate env_realsr
+cd /home/d_korostelev/Projects/super_resolution/NEW_ESRGAN/src
+CUDA_VISIBLE_DEVICES=0 python realesrgan/train.py -opt options/glass/1x_2x_stage1/resnet_1x_2x_stage1_exp0.yml --auto_resume

@@ -9,6 +9,7 @@ from basicsr.utils.img_process_util import filter2D
 from basicsr.utils.registry import MODEL_REGISTRY
 from torch.nn import functional as F
 
+import logging
 
 @MODEL_REGISTRY.register()
 class RealESRNetModel(SRModel):
@@ -26,6 +27,7 @@ class RealESRNetModel(SRModel):
         self.usm_sharpener = USMSharp().cuda()  # do usm sharpening
         self.queue_size = opt.get('queue_size', 180)
 
+        
     @torch.no_grad()
     def _dequeue_and_enqueue(self):
         """It is the training pair pool for increasing the diversity in a batch.
@@ -186,3 +188,8 @@ class RealESRNetModel(SRModel):
         self.is_train = False
         super(RealESRNetModel, self).nondist_validation(dataloader, current_iter, tb_logger, save_img)
         self.is_train = True
+
+# logging.info(self.lq.shape)
+# logging.info(self.gt.shape)
+# logging.info(torch.max(self.lq))
+# logging.info(torch.max(self.gt))

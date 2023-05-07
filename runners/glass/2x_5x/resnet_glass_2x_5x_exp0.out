@@ -1,0 +1,39 @@
+Current path=/home/d_korostelev/Projects/super_resolution/NEW_ESRGAN/src/runners/glass/2x_5x
+node=gpuserv
+nproc=72
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2022 NVIDIA Corporation
+Built on Wed_Jun__8_16:49:14_PDT_2022
+Cuda compilation tools, release 11.7, V11.7.99
+Build cuda_11.7.r11.7/compiler.31442593_0
+2991
+/home/d_korostelev/Projects/super_resolution/NEW_ESRGAN/src/runners/glass/2x_5x
+gpuserv
+4
+
+Mon Apr  3 21:24:37 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.65.01    Driver Version: 515.65.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla V100-PCIE...  On   | 00000000:61:00.0 Off |                    0 |
+| N/A   42C    P0    28W / 250W |      0MiB / 16384MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  Tesla V100-PCIE...  On   | 00000000:DB:00.0 Off |                    0 |
+| N/A   36C    P0    24W / 250W |      0MiB / 16384MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Disable distributed.
+Path already exists. Rename it to /home/d_korostelev/Projects/super_resolution/NEW_ESRGAN/src/tb_logger/resnet_glass_2x_5x_exp0_archived_20230403_212444

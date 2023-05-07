@@ -1,0 +1,111 @@
+# general settings
+name: resnet_glass_1x_2x_exp0
+model_type: RealESRNetModel
+scale: 2
+num_gpu: auto  # auto: can infer from your visible devices automatically. official: 4 GPUs
+manual_seed: 0
+
+# ----------------- options for synthesizing training data in RealESRNetModel ----------------- #
+gt_usm: False  # USM the ground-truth
+high_order_degradation: False
+
+
+queue_size: 140
+
+# dataset and data loader settings
+datasets:
+  train:
+    name: glass_1x_2x
+    type: RealESRGANPairedDataset
+    dataroot_gt: /home/d_korostelev/Projects/super_resolution/contrastive-unpaired-translation/datasets/glass_dataset/1x_2x/train
+    dataroot_lq: /home/d_korostelev/Projects/super_resolution/contrastive-unpaired-translation/datasets/glass_dataset/1x_2x/train
+    meta_info: /home/d_korostelev/Projects/super_resolution/contrastive-unpaired-translation/datasets/glass_dataset/1x_2x/train/meta_info/glass_1x_2x.txt
+
+    io_backend:
+      type: disk
+
+    gt_size: 256
+    use_hflip: True
+    use_rot: False
+
+    # data loader
+    use_shuffle: true
+    num_worker_per_gpu: 5
+    batch_size_per_gpu: 12
+    dataset_enlarge_ratio: 1
+    prefetch_mode: ~
+
+  val:
+    name: validation
+    type: PairedImageDataset
+    dataroot_gt: /home/d_korostelev/Projects/super_resolution/contrastive-unpaired-translation/datasets/glass_dataset/1x_2x/val/trainB
+    dataroot_lq: /home/d_korostelev/Projects/super_resolution/contrastive-unpaired-translation/datasets/glass_dataset/1x_2x/val/trainA
+    io_backend:
+      type: disk
+
+
+# network structures
+network_g:
+  type: RRDBNet
+  num_in_ch: 3
+  num_out_ch: 3
+  num_feat: 64
+  num_block: 23
+  num_grow_ch: 32
+  scale: 2
+
+# path
+path:
+  pretrain_network_g: experiments/pretrained_models/RealESRGAN_x2plus.pth
+  param_key_g: params_ema
+  strict_load_g: False
+  resume_state: ~
+
+# training settings
+train:
+  ema_decay: 0.999
+  optim_g:
+    type: Adam
+    lr: !!float 2e-4
+    weight_decay: 0
+    betas: [0.9, 0.99]
+
+  scheduler:
+    type: MultiStepLR
+    milestones: [1000000]
+    gamma: 0.5
+
+  total_iter: 1000000
+  warmup_iter: -1  # no warm up
+
+  # losses
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 1.0
+    reduction: mean
+
+
+# validation settings
+val:
+  val_freq: !!float 5e3
+  save_img: True
+
+  metrics:
+    psnr: # metric name
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: false
+
+# logging settings
+logger:
+  print_freq: 100
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: true
+  wandb:
+    project: realsr_glass_1x_2x
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500
